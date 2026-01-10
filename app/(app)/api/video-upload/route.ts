@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
+import { resend } from "@/utils/resend";
+import { currentUser } from "@clerk/nextjs/server";
 
 const prisma = new PrismaClient();
 
@@ -89,6 +91,40 @@ export async function POST(req: NextRequest) {
         duration: result.duration || 0,
       },
     });
+
+    //adding feature for report
+
+    const user = await currentUser();
+    const email = user?.emailAddresses[0].emailAddress;
+
+    const compressionPercentage = Math.round(
+      (1 - Number(result.bytes) / Number(originalSize)) * 100
+    );
+
+    const report = `
+VIDEO ANALYTICS REPORT
+----------------------
+Title: ${title}
+Description: ${description}
+Duration: ${result.duration || 0} seconds
+Original Size: ${(Number(originalSize) / 1024 / 1024).toFixed(2)} MB
+Compressed Size: ${(Number(result.bytes) / 1024 / 1024).toFixed(2)} MB
+Compression Saved: ${compressionPercentage}%
+Upload Time: ${new Date().toLocaleString()}
+Cloudinary ID: ${result.public_id}
+`;
+
+    if (email) {
+      await resend.emails.send({
+        from: "Cloudinary Toolkit <onboarding@resend.dev>",
+        to: [email],
+        subject: "Your Video Analytics Report",
+        html: `
+      <h2>Upload Successful </h2>
+      <pre>${report}</pre>
+    `,
+      });
+    }
     return NextResponse.json(video);
   } catch (error) {
     console.log("UPload video failed", error);

@@ -49,8 +49,8 @@ export default function AppLayout({
       />
       <div className="drawer-content flex flex-col">
         {/* Navbar */}
-        <header className="w-full bg-base-200">
-          <div className="navbar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <header className="w-full bg-base-200 border-b border-base-300">
+          <div className="navbar min-h-[64px] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex-none lg:hidden">
               <label
                 htmlFor="sidebar-drawer"
@@ -62,15 +62,18 @@ export default function AppLayout({
             <div className="flex-1">
               <Link href="/" onClick={handleLogoClick}>
                 <div className="btn btn-ghost normal-case text-2xl font-bold tracking-tight cursor-pointer">
-                  Cloudinary Showcase
+                  Cloudinary Toolkit
                 </div>
               </Link>
             </div>
-            <div className="flex-none flex items-center space-x-4">
+            <div className="flex-none">
               {user && (
-                <>
-                  <div className="avatar">
-                    <div className="w-8 h-8 rounded-full">
+                <div className="dropdown dropdown-end">
+                  <label
+                    tabIndex={0}
+                    className="btn btn-ghost btn-circle avatar"
+                  >
+                    <div className="w-8 rounded-full">
                       <img
                         src={user.imageUrl}
                         alt={
@@ -78,17 +81,24 @@ export default function AppLayout({
                         }
                       />
                     </div>
-                  </div>
-                  <span className="text-sm truncate max-w-xs lg:max-w-md">
-                    {user.username || user.emailAddresses[0].emailAddress}
-                  </span>
-                  <button
-                    onClick={handleSignOut}
-                    className="btn btn-ghost btn-circle"
+                  </label>
+
+                  <ul
+                    tabIndex={0}
+                    className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
                   >
-                    <LogOutIcon className="h-6 w-6" />
-                  </button>
-                </>
+                    <li className="px-2 py-1 text-xs opacity-60">
+                      {user.username || user.emailAddresses[0].emailAddress}
+                    </li>
+
+                    <li>
+                      <button onClick={handleSignOut} className="text-error">
+                        <LogOutIcon className="w-4 h-4" />
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               )}
             </div>
           </div>
@@ -103,18 +113,25 @@ export default function AppLayout({
       <div className="drawer-side">
         <label htmlFor="sidebar-drawer" className="drawer-overlay"></label>
         <aside className="bg-base-200 w-64 h-full flex flex-col">
-          <div className="flex items-center justify-center py-4">
-            <ImageIcon className="w-10 h-10 text-primary" />
+          <div className="flex flex-col items-center justify-center py-6 border-b border-base-300">
+            <div className="bg-primary/10 p-3 rounded-xl mb-2">
+              <ImageIcon className="w-8 h-8 text-primary" />
+            </div>
+            <h2 className="text-xs uppercase tracking-widest opacity-60">
+              Product
+            </h2>
+            <p className="text-sm font-medium mt-1">Media Delivery Suite</p>
           </div>
+
           <ul className="menu p-4 w-full text-base-content flex-grow">
             {sidebarItems.map((item) => (
               <li key={item.href} className="mb-2">
                 <Link
                   href={item.href}
-                  className={`flex items-center space-x-4 px-4 py-2 rounded-lg ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                     pathname === item.href
-                      ? "bg-primary text-white"
-                      : "hover:bg-base-300"
+                      ? "bg-primary text-white shadow-md"
+                      : "hover:bg-base-300 hover:translate-x-1"
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >

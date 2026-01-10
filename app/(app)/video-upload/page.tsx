@@ -9,12 +9,43 @@ function VideoUpload() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  //for srt feature
+  // const [transcript, setTranscript] = useState("");
 
   const router = useRouter();
   //max file size of 60 mb
 
   const MAX_FILE_SIZE = 70 * 1024 * 1024;
 
+  //logic for srt video processing using web speech API
+  /*
+  const startSpeechRecognition = () => {
+    const SpeechRecognition =
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.lang = "en-US";
+
+    recognition.onresult = (event: any) => {
+      const text = event.results[event.results.length - 1][0].transcript;
+
+      setTranscript((prev) => prev + " " + text);
+    };
+
+    recognition.start();
+    return recognition;
+  };
+  //play video silently in background to generate srt
+  const playVideoSilently = (file: File) => {
+    const video = document.createElement("video");
+    video.src = URL.createObjectURL(file);
+    video.muted = true;
+    video.play();
+  };
+
+ */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) return;
@@ -42,6 +73,21 @@ function VideoUpload() {
         toast.success("Video uploaded successfully!", {
           duration: 3000,
         });
+
+        /*
+        // START subtitle capture
+        const recognition = startSpeechRecognition();
+        playVideoSilently(file);
+
+        setTimeout(async () => {
+          recognition.stop();
+
+          await axios.post("/api/send-srt", {
+            text: transcript,
+          });
+        }, 30000); // 30 sec capture
+        */
+
         router.push("/");
       }
     } catch (error) {

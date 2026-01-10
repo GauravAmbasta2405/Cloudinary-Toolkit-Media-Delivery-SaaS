@@ -18,13 +18,16 @@
     "lucide-react": "^0.562.0",
     "next": "^14.2.35",
     "next-cloudinary": "^6.17.5",
+    "nodemailer": "^7.0.12",
     "prisma": "^5.22.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-hot-toast": "^2.6.0"
+    "react-hot-toast": "^2.6.0",
+    "resend": "^6.7.0"
   },
   "devDependencies": {
     "@types/node": "^20.19.28",
+    "@types/nodemailer": "^7.0.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "daisyui": "^5.5.14",
