@@ -1,6 +1,13 @@
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+export async function GET() {
+  return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
+    status: 405,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { auth, currentUser } from "@clerk/nextjs/server";
@@ -18,10 +25,6 @@ interface CloudinaryUploadResult {
   bytes: number;
   duration?: number;
   [key: string]: any;
-}
-
-export async function GET() {
-  return NextResponse.json({ error: "Method Not Allowed" }, { status: 405 });
 }
 
 export async function POST(req: NextRequest) {
@@ -90,7 +93,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Send email report (optional - won't break if Resend not configured)
+    // Send email report (optional)
     try {
       if (process.env.RESEND_API_KEY) {
         const { resend } = await import("@/utils/resend");
@@ -125,7 +128,6 @@ Cloudinary ID: ${result.public_id}
       }
     } catch (emailError) {
       console.error("Email sending failed (non-critical):", emailError);
-      // Don't fail the whole request if email fails
     }
 
     return NextResponse.json(video);

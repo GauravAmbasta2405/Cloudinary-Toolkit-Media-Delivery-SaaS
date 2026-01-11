@@ -1,13 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ["@prisma/client", "cloudinary"],
+    serverComponentsExternalPackages: [
+      "@prisma/client",
+      "cloudinary",
+      "resend",
+    ],
   },
-  webpack: (config) => {
-    config.externals.push({
-      "utf-8-validate": "commonjs utf-8-validate",
-      bufferutil: "commonjs bufferutil",
-    });
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals.push({
+        "utf-8-validate": "commonjs utf-8-validate",
+        bufferutil: "commonjs bufferutil",
+      });
+    }
     return config;
   },
 };
