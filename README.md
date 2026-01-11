@@ -1,6 +1,6 @@
 # Cloudinary Toolkit – Media Delivery SaaS
 
-A full‑stack SaaS platform for **video upload, compression, analytics reporting, and automated email notifications**. Built to demonstrate real‑world product engineering using modern cloud and web technologies.
+A full-stack SaaS platform for **video upload, compression, analytics reporting, and automated email notifications**. Built to demonstrate real-world product engineering using modern cloud and web technologies.
 
 This project simulates how production media platforms work – from authentication and storage to background processing and transactional emails.
 
@@ -8,9 +8,7 @@ This project simulates how production media platforms work – from authenticati
 
 ## 🚀 Live Demo
 
-```
-
-```
+👉 https://cloudinary-toolkit.onrender.com/
 
 ---
 
@@ -42,13 +40,12 @@ This project simulates how production media platforms work – from authenticati
   - Metadata stored using **PostgreSQL (Neon)**
   - ORM: **Prisma**
 
-- ⚡ **Event‑Driven Backend**
+- ⚡ **Event-Driven Backend**
 
   - Upload → Process → Save → Notify pipeline
 
 - 🚀 **CI/CD Enabled**
-
-  - Auto‑deploy on every GitHub push using **Vercel**
+  - Auto-deploy on every GitHub push using **Render**
 
 ---
 
@@ -84,25 +81,21 @@ This project simulates how production media platforms work – from authenticati
 
 **Deployment**
 
-- Vercel
+- Render (Auto deploy from GitHub)
 
 ---
 
 ## 🧠 System Architecture
 
-```
-User Uploads Video
-        ↓
-Cloudinary Processing
-        ↓
-Database Storage
-        ↓
-Analytics Generation
-        ↓
+User Uploads Video  
+ ↓  
+Cloudinary Processing  
+ ↓  
+Database Storage  
+ ↓  
+Analytics Generation  
+ ↓  
 Automated Email Report
-```
-
----
 
 ---
 
@@ -110,35 +103,27 @@ Automated Email Report
 
 Create a `.env` file and add:
 
-```env
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=  
+CLOUDINARY_API_KEY=  
 CLOUDINARY_API_SECRET=
 
 DATABASE_URL=
 
-CLERK_SECRET_KEY=
+CLERK_SECRET_KEY=  
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
 
 RESEND_API_KEY=
-```
 
 ---
 
 ## 🏃 Run Locally
 
-```bash
-npm install
+npm install  
 npm run dev
-```
 
 App runs on:
 
-```
 http://localhost:3000
-```
-
----
 
 ---
 
@@ -159,7 +144,7 @@ This project uses Resend free tier.
 ## 📈 Future Enhancements
 
 - PDF analytics reports
-- Multi‑language support
+- Multi-language support
 - Billing integration
 
 ---
