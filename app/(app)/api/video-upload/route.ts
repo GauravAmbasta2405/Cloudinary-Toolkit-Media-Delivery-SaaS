@@ -11,8 +11,9 @@ import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import { resend } from "@/utils/resend";
 import { currentUser } from "@clerk/nextjs/server";
+import { prisma } from "@/lib/prisma";
 
-const prisma = new PrismaClient();
+//const prisma = new PrismaClient();
 
 // Configure Cloudinary with your credentials
 cloudinary.config({
@@ -136,7 +137,8 @@ Cloudinary ID: ${result.public_id}
   } catch (error) {
     console.log("UPload video failed", error);
     return NextResponse.json({ error: "UPload video failed" }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
+  //finally {
+  //await prisma.$disconnect();
+  //}
 }
