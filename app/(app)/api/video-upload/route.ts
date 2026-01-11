@@ -1,19 +1,11 @@
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
-    status: 405,
-    headers: { "Content-Type": "application/json" },
-  });
-}
-
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 
-// Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -27,10 +19,13 @@ interface CloudinaryUploadResult {
   [key: string]: any;
 }
 
+export async function GET() {
+  return NextResponse.json({ error: "Method Not Allowed" }, { status: 405 });
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const authData = await auth();
-    const userId = authData.userId;
+    const { userId } = await auth();
 
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -66,12 +61,7 @@ export async function POST(req: NextRequest) {
           {
             resource_type: "video",
             folder: "video-uploads",
-            transformation: [
-              {
-                quality: "auto",
-                fetch_format: "mp4",
-              },
-            ],
+            transformation: [{ quality: "auto", fetch_format: "mp4" }],
           },
           (error, result) => {
             if (error) reject(error);
@@ -92,43 +82,6 @@ export async function POST(req: NextRequest) {
         duration: result.duration || 0,
       },
     });
-
-    // Send email report (optional)
-    try {
-      if (process.env.RESEND_API_KEY) {
-        const { resend } = await import("@/utils/resend");
-        const user = await currentUser();
-        const email = user?.emailAddresses[0]?.emailAddress;
-
-        if (email) {
-          const compressionPercentage = Math.round(
-            (1 - Number(result.bytes) / Number(originalSize)) * 100
-          );
-
-          const report = `
-VIDEO ANALYTICS REPORT
-----------------------
-Title: ${title}
-Description: ${description}
-Duration: ${result.duration || 0} seconds
-Original Size: ${(Number(originalSize) / 1024 / 1024).toFixed(2)} MB
-Compressed Size: ${(Number(result.bytes) / 1024 / 1024).toFixed(2)} MB
-Compression Saved: ${compressionPercentage}%
-Upload Time: ${new Date().toLocaleString()}
-Cloudinary ID: ${result.public_id}
-`;
-
-          await resend.emails.send({
-            from: "Cloudinary Toolkit <onboarding@resend.dev>",
-            to: [email],
-            subject: "Your Video Analytics Report",
-            html: `<h2>Upload Successful</h2><pre>${report}</pre>`,
-          });
-        }
-      }
-    } catch (emailError) {
-      console.error("Email sending failed (non-critical):", emailError);
-    }
 
     return NextResponse.json(video);
   } catch (error) {

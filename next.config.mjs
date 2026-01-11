@@ -1,20 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    serverComponentsExternalPackages: [
-      "@prisma/client",
-      "cloudinary",
-      "resend",
-    ],
+    serverComponentsExternalPackages: ["@prisma/client", "cloudinary"],
   },
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals.push({
-        "utf-8-validate": "commonjs utf-8-validate",
-        bufferutil: "commonjs bufferutil",
-      });
-    }
-    return config;
+  outputFileTracingIncludes: {
+    "/api/**/*": ["./node_modules/**/*"],
   },
 };
 
